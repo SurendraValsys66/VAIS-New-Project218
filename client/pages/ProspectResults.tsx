@@ -1619,38 +1619,6 @@ export default function ProspectResults() {
                             {columnVisibility.prospect && (
                               <TableCell>
                                 <div className="flex items-center space-x-3">
-                                  <Avatar className="h-10 w-10">
-                                    <AvatarImage
-                                      src={prospect.profileImageUrl}
-                                      alt={prospect.fullName}
-                                    />
-                                    <AvatarFallback className="bg-valasys-orange text-white">
-                                      {prospect.firstName[0]}
-                                      {prospect.lastName[0]}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <div className="flex-1">
-                                    <div className="font-medium text-gray-900">
-                                      {prospect.fullName}
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                      {prospect.jobTitle}
-                                    </div>
-                                    <div className="flex items-center space-x-2 mt-1">
-                                      <Badge
-                                        variant="outline"
-                                        className="text-xs px-1 py-0"
-                                      >
-                                        {prospect.jobLevel}
-                                      </Badge>
-                                      <Badge
-                                        variant="outline"
-                                        className="text-xs px-1 py-0"
-                                      >
-                                        {prospect.jobFunction}
-                                      </Badge>
-                                    </div>
-                                  </div>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
                                       <Button
@@ -1689,6 +1657,38 @@ export default function ProspectResults() {
                                         : "Add to favorites"}
                                     </TooltipContent>
                                   </Tooltip>
+                                  <Avatar className="h-10 w-10">
+                                    <AvatarImage
+                                      src={prospect.profileImageUrl}
+                                      alt={prospect.fullName}
+                                    />
+                                    <AvatarFallback className="bg-valasys-orange text-white">
+                                      {prospect.firstName[0]}
+                                      {prospect.lastName[0]}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex-1">
+                                    <div className="font-medium text-gray-900">
+                                      {prospect.fullName}
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                      {prospect.jobTitle}
+                                    </div>
+                                    <div className="flex items-center space-x-2 mt-1">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs px-1 py-0"
+                                      >
+                                        {prospect.jobLevel}
+                                      </Badge>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs px-1 py-0"
+                                      >
+                                        {prospect.jobFunction}
+                                      </Badge>
+                                    </div>
+                                  </div>
                                 </div>
                               </TableCell>
                             )}
