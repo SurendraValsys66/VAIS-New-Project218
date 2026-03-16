@@ -30,11 +30,19 @@ interface AIBuilderProps {
   onGenerateComplete?: (layout: GeneratedLayout) => void;
 }
 
+const AI_MODELS = [
+  "Claude Haiku 4.5",
+  "Sonnet 4.5",
+  "GPT 5.3",
+  "Grok 4.1",
+];
+
 export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete }) => {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generatedLayout, setGeneratedLayout] = useState<GeneratedLayout | null>(null);
+  const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]);
 
   const handleGenerateLayout = async () => {
     if (!prompt.trim()) {
