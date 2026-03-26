@@ -171,6 +171,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         backgroundRepeat: component.backgroundRepeat || props.backgroundRepeat || "no-repeat",
         backgroundAttachment: component.backgroundAttachment || props.backgroundAttachment || "scroll",
         backgroundOpacity: component.backgroundOpacity ? String(component.backgroundOpacity) : (props.backgroundOpacity ? String(props.backgroundOpacity) : "100"),
+        contentVisibility: (component.contentVisibility || props.contentVisibility || "all") as "all" | "desktop" | "mobile",
+        displayConditions: component.displayConditions || props.displayConditions || [],
       });
 
       // Initialize units from component
@@ -1108,7 +1110,6 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 onChange={(value) => handleStyleChange("borderWidth", value)}
                 type="number"
                 placeholder="0"
-                max={50}
               />
               <StyleInput
                 label="Border Radius (px)"
@@ -1116,7 +1117,6 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 onChange={(value) => handleStyleChange("borderRadius", value)}
                 type="number"
                 placeholder="0"
-                max={200}
               />
             </>
           )}
