@@ -255,6 +255,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         unit,
         onUnitChange,
         placeholder = "",
+        property = "height",
       }: {
         label: string;
         value: string;
@@ -262,15 +263,31 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         unit: "%" | "px";
         onUnitChange: (unit: "%" | "px") => void;
         placeholder?: string;
-      }) =>
-        (
+        property?: "width" | "height" | "fontSize";
+      }) => {
+        // For width in percentage, cap at 100
+        const maxValue = property === "width" && unit === "%" ? 100 : undefined;
+        const displayValue =
+          property === "width" && unit === "%" && Number(value) > 100
+            ? "100"
+            : value;
+
+        return (
           <div className="space-y-2 px-4 py-3 border-b border-gray-100">
             <label className="text-xs font-bold text-gray-700">{label}</label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
+                value={displayValue}
+                onChange={(e) => {
+                  let newValue = e.target.value;
+                  // Prevent width from exceeding 100 when unit is %
+                  if (property === "width" && unit === "%" && Number(newValue) > 100) {
+                    newValue = "100";
+                  }
+                  onChange(newValue);
+                }}
+                max={maxValue}
                 placeholder={placeholder}
                 className="h-9 text-sm flex-1"
               />
@@ -284,7 +301,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
               </select>
             </div>
           </div>
-        ),
+        );
+      },
     []
   );
 
@@ -371,6 +389,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.width}
                 onUnitChange={(unit) => handleUnitChange("width", unit)}
                 placeholder="100"
+                property="width"
               />
               <SizingInput
                 label="Height"
@@ -379,6 +398,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.height}
                 onUnitChange={(unit) => handleUnitChange("height", unit)}
                 placeholder="auto"
+                property="height"
               />
               <SizingInput
                 label="Font Size"
@@ -387,6 +407,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.fontSize}
                 onUnitChange={(unit) => handleUnitChange("fontSize", unit)}
                 placeholder="16"
+                property="fontSize"
               />
             </>
           )}
