@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { BuilderCanvas } from "@/components/builder/Canvas";
 import { Button } from "@/components/ui/button";
 import { Plus, Layout, Search, Zap, Sparkles, Calendar, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
+type View = "list" | "editor";
 
 interface PageData {
   id: string;
@@ -13,6 +18,7 @@ interface PageData {
 }
 
 export default function LandingPages() {
+  const [view, setView] = useState<View>("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [pages, setPages] = useState<PageData[]>([
     { id: "1", name: "Modern Hero Page", updatedAt: "2024-03-20T10:00:00Z" },
@@ -20,7 +26,7 @@ export default function LandingPages() {
   ]);
 
   const handleCreateNew = () => {
-    console.log("Create new page clicked");
+    setView("editor");
   };
 
   const handleViewTemplates = () => {
@@ -30,6 +36,19 @@ export default function LandingPages() {
   const handleAIBuilder = () => {
     console.log("AI builder clicked");
   };
+
+  const handleBack = () => {
+    setView("list");
+  };
+
+  // Editor View
+  if (view === "editor") {
+    return (
+      <DndProvider backend={HTML5Backend}>
+        <BuilderCanvas onBack={handleBack} />
+      </DndProvider>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -114,7 +133,7 @@ export default function LandingPages() {
                     </div>
 
                     <div className="flex items-center gap-2 mt-auto">
-                      <Button className="flex-1 bg-valasys-orange hover:bg-valasys-orange/90 text-white rounded-xl py-5 font-bold shadow-lg shadow-valasys-orange/10">
+                      <Button onClick={handleCreateNew} className="flex-1 bg-valasys-orange hover:bg-valasys-orange/90 text-white rounded-xl py-5 font-bold shadow-lg shadow-valasys-orange/10">
                         Edit Page
                       </Button>
                       <Button
@@ -128,7 +147,7 @@ export default function LandingPages() {
                 </div>
               ))}
 
-              <button className="group rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-12 hover:border-valasys-orange hover:bg-valasys-orange/5 transition-all gap-4 text-gray-400 hover:text-valasys-orange">
+              <button onClick={handleCreateNew} className="group rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-12 hover:border-valasys-orange hover:bg-valasys-orange/5 transition-all gap-4 text-gray-400 hover:text-valasys-orange">
                 <div className="w-16 h-16 rounded-full bg-gray-50 group-hover:bg-valasys-orange/10 flex items-center justify-center transition-colors shadow-inner">
                   <Plus className="w-8 h-8" />
                 </div>
