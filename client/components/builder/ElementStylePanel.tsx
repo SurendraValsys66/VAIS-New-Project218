@@ -83,6 +83,9 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     borders: true,
   });
 
+  const [groupPaddingValues, setGroupPaddingValues] = React.useState(false);
+  const [groupMarginValues, setGroupMarginValues] = React.useState(false);
+
   // Use ref to track pending updates to debounce
   const debounceTimerRef = React.useRef<NodeJS.Timeout>();
   const pendingUpdatesRef = React.useRef<Partial<BuilderComponent>>({});

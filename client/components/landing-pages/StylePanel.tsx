@@ -255,104 +255,188 @@ export const StylePanel: React.FC<StylePanelProps> = ({ onClose }) => {
             <div className="px-4 py-4 space-y-4 bg-gray-50">
               {/* Padding */}
               <div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <label className="text-xs font-semibold text-gray-600">Padding</label>
-                  <label className="flex items-center gap-2 text-xs">
+                  <label className="flex items-center gap-2 text-xs text-gray-600">
                     <input
                       type="checkbox"
                       checked={linkPaddingValues}
                       onChange={(e) => setLinkPaddingValues(e.target.checked)}
+                      className="cursor-pointer"
                     />
-                    <span>Group values</span>
+                    <span>Group sides</span>
                   </label>
                 </div>
                 {linkPaddingValues ? (
-                  <InputGroup
-                    value={styles.paddingTop}
-                    onChange={(val: string) => {
-                      updateStyle("paddingTop", val);
-                      updateStyle("paddingRight", val);
-                      updateStyle("paddingBottom", val);
-                      updateStyle("paddingLeft", val);
-                    }}
-                    unit="px"
-                  />
-                ) : (
-                  <div className="space-y-2">
-                    <InputGroup
-                      label="Top"
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xs text-gray-500">⊞</span>
+                    <Input
+                      type="number"
                       value={styles.paddingTop}
-                      onChange={(val: string) => updateStyle("paddingTop", val)}
-                      unit="px"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateStyle("paddingTop", val);
+                        updateStyle("paddingRight", val);
+                        updateStyle("paddingBottom", val);
+                        updateStyle("paddingLeft", val);
+                      }}
+                      className="flex-1 text-xs h-8"
                     />
-                    <InputGroup
-                      label="Right"
-                      value={styles.paddingRight}
-                      onChange={(val: string) => updateStyle("paddingRight", val)}
-                      unit="px"
-                    />
-                    <InputGroup
-                      label="Bottom"
-                      value={styles.paddingBottom}
-                      onChange={(val: string) => updateStyle("paddingBottom", val)}
-                      unit="px"
-                    />
-                    <InputGroup
-                      label="Left"
-                      value={styles.paddingLeft}
-                      onChange={(val: string) => updateStyle("paddingLeft", val)}
-                      unit="px"
-                    />
+                    <span className="text-xs text-gray-500 w-5">px</span>
+                    <div className="flex flex-col gap-0">
+                      <button
+                        onClick={() => {
+                          const val = String(Number(styles.paddingTop) + 1);
+                          updateStyle("paddingTop", val);
+                          updateStyle("paddingRight", val);
+                          updateStyle("paddingBottom", val);
+                          updateStyle("paddingLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => {
+                          const val = String(Math.max(0, Number(styles.paddingTop) - 1));
+                          updateStyle("paddingTop", val);
+                          updateStyle("paddingRight", val);
+                          updateStyle("paddingBottom", val);
+                          updateStyle("paddingLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: "paddingTop", label: "⊞" },
+                      { key: "paddingRight", label: "⊞" },
+                      { key: "paddingBottom", label: "⊞" },
+                      { key: "paddingLeft", label: "⊞" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex gap-1 items-center">
+                        <span className="text-xs text-gray-500">{label}</span>
+                        <Input
+                          type="number"
+                          value={styles[key as keyof StyleState]}
+                          onChange={(e) => updateStyle(key as keyof StyleState, e.target.value)}
+                          className="w-12 text-xs h-8"
+                        />
+                        <span className="text-xs text-gray-500 w-5">px</span>
+                        <div className="flex flex-col gap-0">
+                          <button
+                            onClick={() => updateStyle(key as keyof StyleState, String(Number(styles[key as keyof StyleState]) + 1))}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => updateStyle(key as keyof StyleState, String(Math.max(0, Number(styles[key as keyof StyleState]) - 1)))}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
 
               {/* Margin */}
               <div className="border-t pt-4">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <label className="text-xs font-semibold text-gray-600">Margin</label>
-                  <label className="flex items-center gap-2 text-xs">
+                  <label className="flex items-center gap-2 text-xs text-gray-600">
                     <input
                       type="checkbox"
                       checked={linkMarginValues}
                       onChange={(e) => setLinkMarginValues(e.target.checked)}
+                      className="cursor-pointer"
                     />
-                    <span>Group values</span>
+                    <span>Group sides</span>
                   </label>
                 </div>
                 {linkMarginValues ? (
-                  <InputGroup
-                    value={styles.marginTop}
-                    onChange={(val: string) => {
-                      updateStyle("marginTop", val);
-                      updateStyle("marginRight", val);
-                      updateStyle("marginBottom", val);
-                      updateStyle("marginLeft", val);
-                    }}
-                    unit="px"
-                  />
-                ) : (
-                  <div className="space-y-2">
-                    <InputGroup
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xs text-gray-500">⊞</span>
+                    <Input
+                      type="number"
                       value={styles.marginTop}
-                      onChange={(val: string) => updateStyle("marginTop", val)}
-                      unit="px"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateStyle("marginTop", val);
+                        updateStyle("marginRight", val);
+                        updateStyle("marginBottom", val);
+                        updateStyle("marginLeft", val);
+                      }}
+                      className="flex-1 text-xs h-8"
                     />
-                    <InputGroup
-                      value={styles.marginRight}
-                      onChange={(val: string) => updateStyle("marginRight", val)}
-                      unit="px"
-                    />
-                    <InputGroup
-                      value={styles.marginBottom}
-                      onChange={(val: string) => updateStyle("marginBottom", val)}
-                      unit="px"
-                    />
-                    <InputGroup
-                      value={styles.marginLeft}
-                      onChange={(val: string) => updateStyle("marginLeft", val)}
-                      unit="px"
-                    />
+                    <span className="text-xs text-gray-500 w-5">px</span>
+                    <div className="flex flex-col gap-0">
+                      <button
+                        onClick={() => {
+                          const val = String(Number(styles.marginTop) + 1);
+                          updateStyle("marginTop", val);
+                          updateStyle("marginRight", val);
+                          updateStyle("marginBottom", val);
+                          updateStyle("marginLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => {
+                          const val = String(Math.max(0, Number(styles.marginTop) - 1));
+                          updateStyle("marginTop", val);
+                          updateStyle("marginRight", val);
+                          updateStyle("marginBottom", val);
+                          updateStyle("marginLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: "marginTop", label: "⊞" },
+                      { key: "marginRight", label: "⊞" },
+                      { key: "marginBottom", label: "⊞" },
+                      { key: "marginLeft", label: "⊞" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex gap-1 items-center">
+                        <span className="text-xs text-gray-500">{label}</span>
+                        <Input
+                          type="number"
+                          value={styles[key as keyof StyleState]}
+                          onChange={(e) => updateStyle(key as keyof StyleState, e.target.value)}
+                          className="w-12 text-xs h-8"
+                        />
+                        <span className="text-xs text-gray-500 w-5">px</span>
+                        <div className="flex flex-col gap-0">
+                          <button
+                            onClick={() => updateStyle(key as keyof StyleState, String(Number(styles[key as keyof StyleState]) + 1))}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => updateStyle(key as keyof StyleState, String(Math.max(0, Number(styles[key as keyof StyleState]) - 1)))}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
