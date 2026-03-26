@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { BuilderCanvas } from "@/components/builder/Canvas";
 import { AIBuilder } from "@/components/ai-builder/AIBuilder";
@@ -7,22 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Layers, Plus, Trash2, Edit2, Layout, Calendar, Clock, Search, Zap, Sparkles } from "lucide-react";
+import { Layers, Plus, Trash2, Edit2, Layout, Calendar, Search, Zap, Sparkles, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { PREDEFINED_TEMPLATES } from "@/components/predefine-email-templates";
-import { OnlineMarketingConferenceTemplate } from "@/components/predefine-email-templates";
+import { PREDEFINED_TEMPLATES, OnlineMarketingConferenceTemplate } from "@/components/predefine-email-templates";
 import { BuilderComponent } from "@/types/builder";
+import { StylePanel } from "@/components/landing-pages/StylePanel";
 
 type View = "list" | "editor" | "template-preview" | "template-list" | "ai-builder";
 
@@ -39,6 +31,7 @@ export default function LandingPages() {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [templateInEditor, setTemplateInEditor] = useState<string | null>(null);
   const [aiGeneratedLayout, setAIGeneratedLayout] = useState<BuilderComponent[] | null>(null);
+  const [showStylePanel, setShowStylePanel] = useState(false);
   const [pages, setPages] = useState<PageData[]>([
     { id: "1", name: "Modern Hero Page", updatedAt: "2024-03-20T10:00:00Z" },
     { id: "2", name: "SaaS Product Landing", updatedAt: "2024-03-19T15:30:00Z" },
@@ -64,7 +57,6 @@ export default function LandingPages() {
   };
 
   const handleUseTemplate = (templateId: string) => {
-    // Set the template to be loaded in the editor
     setTemplateInEditor(templateId);
     setView("editor");
   };
@@ -74,10 +66,8 @@ export default function LandingPages() {
   };
 
   const handleAIGenerateComplete = (aiLayout: any) => {
-    // Convert the AI-generated layout to builder format
     const builderComponents = convertAILayoutToBuilderComponents(aiLayout);
     setAIGeneratedLayout(builderComponents);
-    // Navigate to the editor
     setView("editor");
   };
 
@@ -87,6 +77,7 @@ export default function LandingPages() {
     setTemplateInEditor(null);
   };
 
+  // AI Builder View
   if (view === "ai-builder") {
     return (
       <AIBuilder
@@ -96,6 +87,7 @@ export default function LandingPages() {
     );
   }
 
+  // Editor View
   if (view === "editor") {
     return (
       <DndProvider backend={HTML5Backend}>
@@ -108,11 +100,11 @@ export default function LandingPages() {
     );
   }
 
+  // Template List View
   if (view === "template-list") {
     return (
       <DashboardLayout>
         <div className="space-y-8">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
@@ -132,7 +124,6 @@ export default function LandingPages() {
             </Button>
           </div>
 
-          {/* Templates Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {PREDEFINED_TEMPLATES.map((template) => (
               <div
@@ -140,7 +131,6 @@ export default function LandingPages() {
                 className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col border-b-4 border-b-transparent hover:border-b-valasys-orange cursor-pointer"
                 onClick={() => handleSelectTemplate(template.id)}
               >
-                {/* Preview */}
                 <div className="h-48 bg-gradient-to-br from-teal-400 to-orange-200 relative overflow-hidden flex items-center justify-center p-8">
                   <div className="text-center text-white">
                     <Zap className="w-12 h-12 mx-auto mb-3 opacity-80" />
@@ -149,7 +139,6 @@ export default function LandingPages() {
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                 </div>
 
-                {/* Info */}
                 <div className="p-6 flex-1 flex flex-col">
                   <div className="mb-4">
                     <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-valasys-orange transition-colors">
@@ -178,13 +167,13 @@ export default function LandingPages() {
     );
   }
 
+  // Template Preview View
   if (view === "template-preview") {
     const template = PREDEFINED_TEMPLATES.find((t) => t.id === selectedTemplate);
 
     return (
       <DashboardLayout>
         <div className="space-y-6">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
@@ -201,7 +190,6 @@ export default function LandingPages() {
             </Button>
           </div>
 
-          {/* Template Preview */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
             {selectedTemplate === "online-marketing-conference" && (
               <OnlineMarketingConferenceTemplate
@@ -211,7 +199,6 @@ export default function LandingPages() {
             )}
           </div>
 
-          {/* Action Buttons */}
           <div className="flex gap-4 justify-center py-8">
             <Button
               onClick={handleBack}
@@ -226,10 +213,13 @@ export default function LandingPages() {
     );
   }
 
+  // Default List View
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        {/* Header */}
+      <div className="flex h-full gap-0">
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
+          <div className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
@@ -240,33 +230,48 @@ export default function LandingPages() {
             </h1>
             <p className="text-gray-500 mt-1">Design, build and publish high-converting pages in minutes.</p>
           </div>
-          <div className="flex gap-3 flex-wrap justify-end">
-            <Button
-              onClick={handleOpenAIBuilder}
-              className="px-6 py-6 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold text-base group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-            >
-              <Sparkles className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-              AI Builder
-            </Button>
-            <Button
-              onClick={handleViewTemplates}
-              variant="outline"
-              className="px-6 py-6 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold text-base group border-2 border-valasys-orange text-valasys-orange hover:bg-valasys-orange/5"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              View Templates
-            </Button>
-            <Button
-              onClick={handleCreateNew}
-              className="bg-valasys-orange hover:bg-valasys-orange/90 text-white px-6 py-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all font-bold text-base group"
-            >
-              <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
-              Create New Page
-            </Button>
+          <div className="flex gap-3 flex-wrap justify-between items-center">
+            <div></div>
+            <div className="flex gap-3 flex-wrap justify-end">
+              <Button
+                onClick={handleOpenAIBuilder}
+                className="px-6 py-6 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold text-base group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+              >
+                <Sparkles className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                AI Builder
+              </Button>
+              <Button
+                onClick={handleViewTemplates}
+                variant="outline"
+                className="px-6 py-6 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold text-base group border-2 border-valasys-orange text-valasys-orange hover:bg-valasys-orange/5"
+              >
+                <Zap className="w-5 h-5 mr-2" />
+                View Templates
+              </Button>
+              <Button
+                onClick={handleCreateNew}
+                className="bg-valasys-orange hover:bg-valasys-orange/90 text-white px-6 py-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all font-bold text-base group"
+              >
+                <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
+                Create New Page
+              </Button>
+              <Button
+                onClick={() => setShowStylePanel(!showStylePanel)}
+                variant={showStylePanel ? "default" : "outline"}
+                className={cn(
+                  "px-6 py-6 rounded-2xl shadow-md hover:shadow-lg transition-all font-bold text-base",
+                  showStylePanel
+                    ? "bg-valasys-orange hover:bg-valasys-orange/90 text-white"
+                    : "border-2 border-gray-300 text-gray-600 hover:bg-gray-50"
+                )}
+                title="Toggle styling panel"
+              >
+                <Palette className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Stats & Search */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
           <div className="lg:col-span-3">
             <div className="relative group">
@@ -292,14 +297,12 @@ export default function LandingPages() {
           </div>
         </div>
 
-        {/* List */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {pages.map((page) => (
             <div 
               key={page.id}
               className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col border-b-4 border-b-transparent hover:border-b-valasys-orange"
             >
-              {/* Preview */}
               <div className="h-48 bg-gray-50 relative overflow-hidden flex items-center justify-center p-8">
                  <div className="w-full h-full bg-white rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-3 text-gray-300 group-hover:scale-105 group-hover:border-valasys-orange/30 group-hover:text-valasys-orange/30 transition-all">
                     <Layout className="w-10 h-10" />
@@ -308,7 +311,6 @@ export default function LandingPages() {
                  <div className="absolute inset-0 bg-valasys-orange/0 group-hover:bg-valasys-orange/5 transition-colors pointer-events-none" />
               </div>
               
-              {/* Info */}
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -338,7 +340,6 @@ export default function LandingPages() {
             </div>
           ))}
 
-          {/* New Page Trigger Card */}
           <button 
             onClick={handleCreateNew}
             className="group rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-12 hover:border-valasys-orange hover:bg-valasys-orange/5 transition-all gap-4 text-gray-400 hover:text-valasys-orange"
@@ -352,6 +353,11 @@ export default function LandingPages() {
             </div>
           </button>
         </div>
+      </div>
+        </div>
+
+        {/* Styling Panel */}
+        {showStylePanel && <StylePanel onClose={() => setShowStylePanel(false)} />}
       </div>
     </DashboardLayout>
   );
