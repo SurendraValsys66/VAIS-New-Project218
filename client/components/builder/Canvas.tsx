@@ -164,25 +164,28 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
             variant="outline"
             size="sm"
             onClick={handleCopyLayout}
-            className="gap-2"
+            className="group gap-2"
+            title="Copy"
           >
             <Copy className="w-4 h-4" />
-            Copy
+            <span className="hidden group-hover:inline">Copy</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setIsPreviewMode(true)}
-            className="gap-2"
+            className="group gap-2"
+            title="Preview"
           >
             <Eye className="w-4 h-4" />
-            Preview
+            <span className="hidden group-hover:inline">Preview</span>
           </Button>
           <Button
-            className="gap-2 bg-valasys-orange hover:bg-valasys-orange/90 text-white"
+            className="group gap-2 bg-valasys-orange hover:bg-valasys-orange/90 text-white"
+            title="Publish"
           >
             <Save className="w-4 h-4" />
-            Publish
+            <span className="hidden group-hover:inline">Publish</span>
           </Button>
         </div>
       </div>

@@ -248,26 +248,30 @@ export const LandingPageBuilderDnD: React.FC<LandingPageBuilderDnDProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="gap-2"
+              className="group gap-2"
               onClick={() => setShowPreview(true)}
+              title="Preview"
             >
               <Eye className="w-4 h-4" />
-              Preview
+              <span className="hidden group-hover:inline">Preview</span>
             </Button>
             <Button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-valasys-orange hover:bg-orange-600 gap-2"
+              className="group bg-valasys-orange hover:bg-orange-600 gap-2"
               size="sm"
+              title={isSaving ? "Saving..." : "Save"}
             >
               <Save className="w-4 h-4" />
-              {isSaving ? "Saving..." : "Save"}
+              <span className="hidden group-hover:inline">
+                {isSaving ? "Saving..." : "Save"}
+              </span>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="bg-green-600 hover:bg-green-700 gap-2" size="sm">
+                <Button className="group bg-green-600 hover:bg-green-700 gap-2" size="sm" title="Publish">
                   <Share2 className="w-4 h-4" />
-                  Publish
+                  <span className="hidden group-hover:inline">Publish</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
