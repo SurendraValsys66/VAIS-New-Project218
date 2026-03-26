@@ -467,8 +467,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 </div>
 
                 {groupPaddingValues ? (
-                  <div className="flex gap-1 items-center">
-                    <span className="text-xs text-gray-500">⊞</span>
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xs text-gray-500 flex-shrink-0">⊞</span>
                     <Input
                       type="number"
                       value={styles.paddingTop}
@@ -479,10 +479,10 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                         handleStyleChange("paddingBottom", val);
                         handleStyleChange("paddingLeft", val);
                       }}
-                      className="w-16 text-xs h-8 text-center"
+                      className="flex-1 min-w-0 text-xs h-8 text-center"
                     />
-                    <span className="text-xs text-gray-500 w-5">px</span>
-                    <div className="flex flex-col gap-0">
+                    <span className="text-xs text-gray-500 flex-shrink-0">px</span>
+                    <div className="flex flex-col gap-0 flex-shrink-0">
                       <button
                         onClick={() => {
                           const current = Number(styles.paddingTop) || 0;
@@ -519,16 +519,16 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                       { key: "paddingBottom", label: "⊞" },
                       { key: "paddingLeft", label: "⊞" },
                     ].map(({ key, label }) => (
-                      <div key={key} className="flex gap-1 items-center">
-                        <span className="text-xs text-gray-500">{label}</span>
+                      <div key={key} className="flex gap-1 items-center min-w-0">
+                        <span className="text-xs text-gray-500 flex-shrink-0">{label}</span>
                         <Input
                           type="number"
                           value={styles[key as keyof StyleState]}
                           onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
-                          className="w-12 text-xs h-8 text-center"
+                          className="flex-1 min-w-0 text-xs h-8 text-center"
                         />
-                        <span className="text-xs text-gray-500 w-5">px</span>
-                        <div className="flex flex-col gap-0">
+                        <span className="text-xs text-gray-500 flex-shrink-0">px</span>
+                        <div className="flex flex-col gap-0 flex-shrink-0">
                           <button
                             onClick={() => {
                               const current = Number(styles[key as keyof StyleState]) || 0;
@@ -570,8 +570,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 </div>
 
                 {groupMarginValues ? (
-                  <div className="flex gap-1 items-center">
-                    <span className="text-xs text-gray-500">⊞</span>
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xs text-gray-500 flex-shrink-0">⊞</span>
                     <Input
                       type="number"
                       value={styles.marginTop}
@@ -582,10 +582,10 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                         handleStyleChange("marginBottom", val);
                         handleStyleChange("marginLeft", val);
                       }}
-                      className="w-16 text-xs h-8 text-center"
+                      className="flex-1 min-w-0 text-xs h-8 text-center"
                     />
-                    <span className="text-xs text-gray-500 w-5">px</span>
-                    <div className="flex flex-col gap-0">
+                    <span className="text-xs text-gray-500 flex-shrink-0">px</span>
+                    <div className="flex flex-col gap-0 flex-shrink-0">
                       <button
                         onClick={() => {
                           const current = Number(styles.marginTop) || 0;
@@ -622,16 +622,16 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                       { key: "marginBottom", label: "⊞" },
                       { key: "marginLeft", label: "⊞" },
                     ].map(({ key, label }) => (
-                      <div key={key} className="flex gap-1 items-center">
-                        <span className="text-xs text-gray-500">{label}</span>
+                      <div key={key} className="flex gap-1 items-center min-w-0">
+                        <span className="text-xs text-gray-500 flex-shrink-0">{label}</span>
                         <Input
                           type="number"
                           value={styles[key as keyof StyleState]}
                           onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
-                          className="w-12 text-xs h-8 text-center"
+                          className="flex-1 min-w-0 text-xs h-8 text-center"
                         />
-                        <span className="text-xs text-gray-500 w-5">px</span>
-                        <div className="flex flex-col gap-0">
+                        <span className="text-xs text-gray-500 flex-shrink-0">px</span>
+                        <div className="flex flex-col gap-0 flex-shrink-0">
                           <button
                             onClick={() => {
                               const current = Number(styles[key as keyof StyleState]) || 0;
