@@ -105,6 +105,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     handleElementUpdate(elementId, event.currentTarget.textContent || "");
   };
 
+  const handleEditableFocus = (event: React.FocusEvent<HTMLElement>) => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+
+    range.selectNodeContents(event.currentTarget);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    setEditingElementId(event.currentTarget.dataset.elementId || null);
+  };
+
   const handleCopyElement = (elementId: string, content: string) => {
     // Store in local clipboard state
     setClipboardData({ elementId, content });
@@ -268,7 +278,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onInput={(e) => {
                   handleEditableInput("badge", e);
                 }}
-                onFocus={() => setEditingElementId(element.id)}
+                data-element-id={element.id}
+                onFocus={handleEditableFocus}
                 onBlur={(e) => {
                   setEditingElementId(null);
                   const text = e.currentTarget.textContent || "";
@@ -303,7 +314,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               onInput={(e) => {
                 handleEditableInput("heading", e);
               }}
-              onFocus={() => setEditingElementId(element.id)}
+              data-element-id={element.id}
+              onFocus={handleEditableFocus}
               onBlur={(e) => {
                 setEditingElementId(null);
                 const text = e.currentTarget.textContent || "";
@@ -338,7 +350,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               onInput={(e) => {
                 handleEditableInput("paragraph", e);
               }}
-              onFocus={() => setEditingElementId(element.id)}
+              data-element-id={element.id}
+              onFocus={handleEditableFocus}
               onBlur={(e) => {
                 setEditingElementId(null);
                 const text = e.currentTarget.textContent || "";

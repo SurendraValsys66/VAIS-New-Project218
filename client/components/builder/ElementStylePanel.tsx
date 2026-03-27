@@ -275,6 +275,19 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         updates[key] = isNaN(Number(value as string)) ? value : Number(value as string);
       }
 
+      if (
+        key === "heroBadgeText" ||
+        key === "heroHeadingText" ||
+        key === "heroDescriptionText"
+      ) {
+        if (debounceTimerRef.current) {
+          clearTimeout(debounceTimerRef.current);
+        }
+        pendingUpdatesRef.current = {};
+        onUpdate(updates);
+        return;
+      }
+
       // Store in pending updates
       pendingUpdatesRef.current = {
         ...pendingUpdatesRef.current,
