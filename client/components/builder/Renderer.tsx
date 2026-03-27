@@ -555,13 +555,11 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     case "video": {
       const videoSource = component.videoUrl || component.props?.videoUrl || component.props?.src;
 
-      // Log for debugging (can be removed in production)
-      if (videoSource) {
-        console.log("Video source found:", {
-          componentId: component.id,
-          sourceType: videoSource.startsWith("data:") ? "data-url" : videoSource.includes("youtube") ? "youtube" : videoSource.includes("vimeo") ? "vimeo" : "direct-file",
-        });
-      }
+      console.log("Video component - source available:", !!videoSource, {
+        componentId: component.id,
+        videoUrlDefined: !!component.videoUrl,
+        sourceLength: videoSource?.length || 0,
+      });
 
       // Helper function to extract YouTube video ID
       const getYouTubeId = (url: string): string | null => {
@@ -597,9 +595,11 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
         return "video/mp4";
       };
 
-      const isValidVideoSource = videoSource && videoSource.trim().length > 0;
+      const isValidVideoSource = videoSource && typeof videoSource === "string" && videoSource.trim().length > 0;
       const youtubeId = isValidVideoSource ? getYouTubeId(videoSource) : null;
       const vimeoId = isValidVideoSource ? getVimeoId(videoSource) : null;
+
+      console.log("Video detection:", { isValidVideoSource, youtubeId, vimeoId, sourceType: youtubeId ? "youtube" : vimeoId ? "vimeo" : videoSource?.startsWith("data:") ? "data-url" : "direct" });
 
       return wrapWithControls(
         <div className="p-4 h-full" style={getComponentStyles()}>
@@ -627,11 +627,11 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
                 />
               ) : (
                 <video
-                  key={videoSource}
+                  key={`video-${component.id}`}
                   className="h-full w-full object-contain"
                   controls
                   playsInline
-                  preload="none"
+                  preload="metadata"
                 >
                   <source src={videoSource} type={getVideoType(videoSource)} />
                   Your browser does not support the video tag.
