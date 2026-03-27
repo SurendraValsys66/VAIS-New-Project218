@@ -348,13 +348,25 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
             className="w-full focus:outline-none focus:ring-0"
             contentEditable
             suppressContentEditableWarning
+            onFocus={(e) => {
+              // Clear default text when user focuses to edit
+              if (e.currentTarget.textContent === "Catchy Heading" && !component.contentText) {
+                e.currentTarget.textContent = "";
+              }
+            }}
             onInput={(e) => {
               const text = e.currentTarget.textContent || "";
               onUpdate(component.id, { contentText: text });
             }}
             onBlur={(e) => {
               const text = e.currentTarget.textContent || "";
-              onUpdate(component.id, { contentText: text });
+              // Restore default if empty
+              if (!text) {
+                e.currentTarget.textContent = "Catchy Heading";
+                onUpdate(component.id, { contentText: "" });
+              } else {
+                onUpdate(component.id, { contentText: text });
+              }
             }}
             style={{
               color: component.textColor || "#111827",
@@ -375,19 +387,32 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
         </div>,
       );
     case "paragraph":
+      const defaultParaText = "Add your description text here. Make it compelling and easy to read for your visitors.";
       return wrapWithControls(
         <div className="p-4 h-full" style={getComponentStyles()}>
           <p
             className="focus:outline-none focus:ring-0"
             contentEditable
             suppressContentEditableWarning
+            onFocus={(e) => {
+              // Clear default text when user focuses to edit
+              if (e.currentTarget.textContent === defaultParaText && !component.contentText) {
+                e.currentTarget.textContent = "";
+              }
+            }}
             onInput={(e) => {
               const text = e.currentTarget.textContent || "";
               onUpdate(component.id, { contentText: text });
             }}
             onBlur={(e) => {
               const text = e.currentTarget.textContent || "";
-              onUpdate(component.id, { contentText: text });
+              // Restore default if empty
+              if (!text) {
+                e.currentTarget.textContent = defaultParaText;
+                onUpdate(component.id, { contentText: "" });
+              } else {
+                onUpdate(component.id, { contentText: text });
+              }
             }}
             style={{
               color: component.textColor || "#4b5563",
@@ -403,7 +428,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
               boxShadow: "none !important",
             }}
           >
-            {component.contentText || "Add your description text here. Make it compelling and easy to read for your visitors."}
+            {component.contentText || defaultParaText}
           </p>
         </div>,
       );
